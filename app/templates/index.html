@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}
+<title>Simulation | Home</title>
+{% endblock %}
+{% block content %}
+<canvas id="simulation" width="500" height="500"
+style="border:1px solid black">
+</canvas>
+<script>
+    var c = document.getElementById("simulation");
+    var ctx = c.getContext ("2d");
+    ctx.moveTo (0, 20);
+    ctx.lineTo (20, 80);
+    ctx.lineTo (70, 100);
+    ctx.stroke ();
+</script>
+{% endblock %}
