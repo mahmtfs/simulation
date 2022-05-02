@@ -1,17 +1,18 @@
-{% extends "base.html" %}
+{% extends "layout.html" %}
 {% block title %}
 <title>Simulation | Home</title>
 {% endblock %}
+{% block link %}
+    <link rel="script" type="text/plain" href="../static/js/simulation.js">
+{% endblock %}
 {% block content %}
-<canvas id="simulation" width="500" height="500"
-style="border:1px solid black">
-</canvas>
-<script>
-    var c = document.getElementById("simulation");
-    var ctx = c.getContext ("2d");
-    ctx.moveTo (0, 20);
-    ctx.lineTo (20, 80);
-    ctx.lineTo (70, 100);
-    ctx.stroke ();
-</script>
+    <div class="container d-flex justify-content-center">
+        <div style="margin-top:20px;">
+            <h1 class="d-flex justify-content-center">The simulation window:</h1>
+            <canvas id="simulation" width="500" height="200"
+            style="border:1px solid black">
+            </canvas>
+        </div>
+    </div>
+    <script src="../static/js/simulation.js"></script>
 {% endblock %}
