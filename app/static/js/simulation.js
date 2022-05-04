@@ -2,6 +2,7 @@ class Point{
     constructor(x, y){
         this.x = x;
         this.y = y;
+        this.color = "#ffffff";
     }
     move(dirX, dirY){
         this.x += dirX;
@@ -19,7 +20,7 @@ class Pair{
     }
 }
 
-function generatePoints(radius, planeSize = new Pair(500, 200), discardNum = 30){
+function generatePoints(radius, planeSize = new Pair(500, 300), discardNum = 30){
     let cellSize = radius/Math.sqrt(2);
     var grid = new Array(Math.ceil(planeSize.y/cellSize));
     for (let i = 0; i < grid.length; i++) {
@@ -30,9 +31,10 @@ function generatePoints(radius, planeSize = new Pair(500, 200), discardNum = 30)
     }
     let points = new Array(0);
     let spawnPoints = new Array(0);
+    let val = document.getElementById("amount").value;
 
     spawnPoints.push(new Point(planeSize.x / 2, planeSize.y / 2));
-    while (spawnPoints.length > 0){
+    while (points.length < val){
         let spawnIndex = parseInt(Math.random() * spawnPoints.length);
         let spawnCenter = spawnPoints[spawnIndex];
         let candidateAccepted = false;
@@ -84,16 +86,29 @@ function isValid(candidate, planeSize, cellSize, radius, points, grid){
     return false;
 }
 
+function generateRandomColor(){
+    let maxVal = 0xFFFFFF;
+    let randomNumber = Math.random() * maxVal;
+    randomNumber = Math.floor(randomNumber);
+    randomNumber = randomNumber.toString(16);
+    let randColor = randomNumber.padStart(6, 0);
+    return `#${randColor.toUpperCase()}`
+}
+
 var c = document.getElementById("simulation");
 var ctx = c.getContext("2d");
-var radius = 5;
+var radius = 1;
 
-var points = generatePoints(30);
-for (let i = 0; i < points.length; i++){
-    ctx.beginPath();
-    ctx.arc(points[i].x, points[i].y, radius, 0, Math.PI * 2, false);
-    ctx.strokeStyle = "black";
-    ctx.fillStyle = "red";
-    ctx.fill();
-    ctx.stroke();
+function simulation(){
+    ctx.clearRect(0, 0, c.width, c.height);
+    var points = generatePoints(5);
+    for (let i = 0; i < points.length; i++){
+        points[i].color = generateRandomColor();
+        ctx.beginPath();
+        ctx.arc(points[i].x, points[i].y, radius, 0, Math.PI * 2, false);
+        ctx.strokeStyle = "#000000";
+        ctx.fillStyle = points[i].color;
+        ctx.fill();
+        ctx.stroke();
+    }
 }
