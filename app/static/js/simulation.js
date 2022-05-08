@@ -13,6 +13,17 @@ class Point{
     }
 }
 
+class Group{
+	constructor(name, color, percentage) {
+		this.name = name;
+		this.color = color;
+		this.percentage = percentage;
+	}
+	toString() {
+        return this.name + " " + this.color + " " + this.percentage;
+    }
+}
+
 class Pair{
     constructor(x, y) {
         this.x = x;
@@ -31,7 +42,7 @@ function generatePoints(radius, planeSize = new Pair(500, 300), discardNum = 30)
     }
     let points = new Array(0);
     let spawnPoints = new Array(0);
-    let val = document.getElementById("amount").value;
+    let val = document.getElementById("sliderValue").value;
 
     spawnPoints.push(new Point(planeSize.x / 2, planeSize.y / 2));
     while (points.length < val){
@@ -96,10 +107,66 @@ function generateRandomColor(){
     return `#${randColor.toUpperCase()}`
 }
 
-var c = document.getElementById("simulation");
-var ctx = c.getContext("2d");
-var radius = 3;
+let c = document.getElementById("simulation");
+let ctx = c.getContext("2d");
+let radius = 2;
 let pointArr;
+let groups = new Array(0);
+let groupsNames = new Set();
+let groupsColors = new Set();
+
+function fillGroup(){
+	document.getElementById("controller").innerHTML =
+		"<button onclick=\"addGroup()\" class=\"btn btn-dark\" type=\"button\">Submit</button>"
+	document.getElementById("new-group").innerHTML =
+		"<label for=\"name-of-group\">Name of group:</label>\n" +
+		"<br>\n" +
+		"<input id=\"name-of-group\" type=\"text\" style=\"width: 120px;\">\n" +
+		"<br>\n" +
+		"<label for=\"color-of-group\">Color of group:</label>\n" +
+		"<br>\n" +
+		"<input id=\"color-of-group\" type=\"color\" style=\"width: 120px;\">\n" +
+		"<br>\n";
+}
+
+function addGroup(){
+	let HTML = '';
+	let name = document.getElementById("name-of-group").value;
+	let color = document.getElementById("color-of-group").value;
+	let group = new Group(name, color, 0);
+	groups.push(group);
+	groupsNames.add(group.name);
+	if (groups.length !== groupsNames.size){
+		alert("groups should have different names");
+		groups.pop();
+	}
+	else{
+		groupsColors.add(group.color);
+		if (groups.length !== groupsColors.size) {
+			alert("groups should have different colors");
+			groups.pop();
+			groupsNames.delete(group.name);
+		}
+	}
+	document.getElementById("new-group").innerHTML = "";
+	document.getElementById("controller").innerHTML =
+		"<button onclick=\"fillGroup()\" class=\"btn btn-dark\" type=\"button\">Add group</button>"
+	groups.forEach(function(item) {
+    	HTML += '<li class="list-group-item d-flex justify-content-around">'
+			+ '<label>' + item.name + '</label>'
+			+ '<div style="display: flex; align-items: center">'
+			+ '<div style="width: 10px; height: 10px; background:'
+			+ item.color + '; border-radius: 50%">'
+			+ '</div>'
+			+ '</div>'
+			+ '</li>';
+	});
+	document.getElementById("groups-list").innerHTML = '<ul class="list-group">' + HTML + '</ul>';
+}
+
+function removeGroup(){
+
+}
 
 function drawPoints(points){
 	for (let i = 0; i < points.length; i++){
@@ -115,7 +182,7 @@ function drawPoints(points){
 
 function simulation(){
     ctx.clearRect(0, 0, c.width, c.height);
-    var points = generatePoints(9);
+    var points = generatePoints(7);
 	drawPoints(points);
 	pointArr = points;
 }

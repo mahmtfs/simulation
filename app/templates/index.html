@@ -8,11 +8,38 @@
         <h1 class="d-flex justify-content-center">The simulation window:</h1>
         <div class="d-flex justify-content-around">
             <div>
-                <label for="amount">Amount of points:</label>
+                <label for="sliderValue" >Amount of points:</label>
                 <br>
-                <span id="amountValue">50</span>
+                <input onchange="getTextInput()" id="textValue" type="number" min="2" max="1000" value="50"
+                       style="width: 80px;">
                 <br>
-                <input oninput="getAmount()" id="amount" type="range" min="2" max="1000" value="50">
+                <input oninput="getSliderInput()" id="sliderValue" type="range" min="2" max="1000" value="50">
+                <script>
+                    function getSliderInput(){
+                        let val = document.getElementById("sliderValue").value;
+                        document.getElementById("textValue").value = val;
+                    }
+                    function getTextInput(){
+                        let val = document.getElementById("textValue").value;
+                        val = parseInt(val);
+                        if (val < 2){
+                            val = 2;
+                        }
+                        if (val > 1000){
+                            val = 1000;
+                        }
+                        document.getElementById("textValue").value = val;
+                        document.getElementById("sliderValue").value = val;
+                    }
+                </script>
+                <br>
+                <div id="groups-list">
+                </div>
+                <div id="new-group">
+                </div>
+                <div id="controller">
+                    <button onclick="fillGroup()" class="btn btn-dark" type="button">Add group</button>
+                </div>
             </div>
             <canvas id="simulation" width="500" height="300"
             style="border:1px solid black">
@@ -20,15 +47,6 @@
             <div>
                 <label for="amount">Amount of points:</label>
                 <br>
-                <span id="amountValue">50</span>
-                <br>
-                <input oninput="getAmount()" id="amount2" type="range" min="2" max="100" value="50">
-                <script>
-                    function getAmount(){
-                        let val = document.getElementById("amount").value;
-                        document.getElementById("amountValue").innerHTML = val;
-                    }
-                </script>
             </div>
         </div>
         <div class="d-flex justify-content-center" style="margin-top: 20px;">
